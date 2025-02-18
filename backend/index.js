@@ -1,5 +1,5 @@
 // server.js
-
+require("dotenv").config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -12,10 +12,9 @@ app.use(cors())
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/blogDB').then(()=>{
+mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log("Connection Successfull")
 })
-
 
 // Define Schema
 const blogSchema = new mongoose.Schema({
@@ -38,7 +37,6 @@ app.get('/api/blogs', async (req, res) => {
   }
 });
 
-
 app.patch('/api/blogs/like/:id', async (req, res) => {
     try {
       const blog = await Blog.findById(req.params.id);
@@ -59,7 +57,6 @@ app.patch('/api/blogs/like/:id', async (req, res) => {
     }
   });
 
-
 app.post('/api/blogs', async (req, res) => {
 
   const blog = new Blog({
@@ -78,4 +75,5 @@ app.post('/api/blogs', async (req, res) => {
 });
 
 // Start server
-app.listen(5000, () => console.log('Server running on port 5000'));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log('Server running on port 5000'));

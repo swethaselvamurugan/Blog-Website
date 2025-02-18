@@ -9,7 +9,7 @@ function Home() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        axios.get("http://localhost:5000/api/blogs").then((res) => {
+        axios.get(`${process.env.REACT_APP_API_URL}/api/blogs`).then((res) => {
             console.log(res.data)
             setBlogs(res.data)
         }).catch(() => {
