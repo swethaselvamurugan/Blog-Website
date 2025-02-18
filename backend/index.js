@@ -11,6 +11,22 @@ app.use(cors())
 // Middleware
 app.use(bodyParser.json());
 
+//cors
+app.use(
+  cors({
+      origin: process.env.CLIENT_BASE_URL,
+      methods: ['GET', 'POST', 'DELETE', 'PUT'],
+      allowedHeaders: [
+          "Content-Type",
+          'Authorization',
+          'Cache-Control',
+          'Expires',
+          'Pragma'
+      ],
+      credentials: true
+  })
+);
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log("Connection Successfull")
