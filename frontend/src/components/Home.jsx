@@ -6,14 +6,17 @@ import axios from 'axios'
 function Home() {
     const navigate = useNavigate()
     const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         axios.get(`${process.env.REACT_APP_API_URL}/api/blogs`).then((res) => {
             console.log(res.data)
             setBlogs(res.data)
+            setLoading(false)
         }).catch(() => {
             console.log("Error fetching data")
+            setLoading(false)
         })
     }, [])
 
@@ -49,45 +52,63 @@ function Home() {
             <section className="max-w-6xl mx-auto py-20 px-4 text-center">
                 <h3 className="text-3xl font-semibold text-orange-400 mb-4">Latest Posts</h3>
                 <div className="grid md:grid-cols-3 gap-6">
-                    {latestBlogs.map((blog) => (
-                        <div key={blog._id} className="bg-white text-gray-900 p-6 shadow-md rounded-lg">
-                            <h4 className="text-xl font-bold mb-2">{blog.newTitle}</h4>
-                            <p className="text-gray-700 mb-4">{blog.newContent.substring(0, 100)}...</p>
-                            <button
-                                onClick={() => navigate("/blogs")}
-                                className="bg-orange-400 hover:bg-orange-600 text-white p-3 rounded-lg"
-                            >
-                                Read More
-                            </button>
-                        </div>
-                    ))}
+                    {
+                        loading ?
+                            [1, 2, 3].map((index) => (
+                                <div key={index} className="animate-pulse bg-gray-300 h-[200px] rounded-lg"></div>
+                            )) :
+                            latestBlogs.map((blog) => (
+                                <div key={blog._id} className="bg-white text-gray-900 p-6 shadow-md rounded-lg">
+                                    <h4 className="text-xl font-bold mb-2">{blog.newTitle}</h4>
+                                    <p className="text-gray-700 mb-4">{blog.newContent.substring(0, 100)}...</p>
+                                    <button
+                                        onClick={() => navigate("/blogs")}
+                                        className="bg-orange-400 hover:bg-orange-600 text-white p-3 rounded-lg"
+                                    >
+                                        Read More
+                                    </button>
+                                </div>
+                            ))
+                    }
                 </div>
             </section>
 
             <section className="max-w-6xl mx-auto py-20 px-4 text-center">
                 <h3 className="text-3xl font-semibold text-orange-400 mb-4">Popular Tags</h3>
                 <div className="flex flex-wrap justify-center gap-4">
-                    {popularBlogs.slice(0, 5).map((blog, index) => (
-                        <button
-                            key={index}
-                            className="bg-orange-400 hover:bg-orange-600 text-white py-2 px-4 rounded-lg"
-                            onClick={() => navigate("/blogs")}
-                        >
-                            {blog.newTitle}
-                        </button>
-                    ))}
+                    {
+                        loading ?
+                            [1, 2, 3, 4, 5].map((index) => (
+                                <div key={index} className="bg-gray-300 animate-pulse py-2 px-6 rounded-lg w-24 h-8"></div>
+                            )) :
+                            popularBlogs.slice(0, 5).map((blog, index) => (
+                                <button
+                                    key={index}
+                                    className="bg-orange-400 hover:bg-orange-600 text-white py-2 px-4 rounded-lg"
+                                    onClick={() => navigate("/blogs")}
+                                >
+                                    {blog.newTitle}
+                                </button>
+                            ))
+                    }
                 </div>
             </section>
 
             <section className="bg-orange-400 py-20 text-center text-white">
                 <h3 className="text-3xl font-semibold mb-6">Featured Content</h3>
                 <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6 px-4">
-                    {featuredBlogs.map((blog) => (
-                        <div key={blog._id} className="bg-white text-gray-900 p-6 shadow-md rounded-lg">
-                            <h4 className="text-xl font-bold mb-2">{blog.newTitle}</h4>
-                            <p className="text-gray-700">{blog.newContent.substring(0, 100)}...</p>
-                        </div>
-                    ))}
+                    {
+                        loading ?
+                            [1, 2, 3].map((index) => (
+                                <div key={index} className="animate-pulse bg-gray-300 h-[200px] rounded-lg"></div>
+                            )) :
+                            featuredBlogs.map((blog) => (
+                                <div key={blog._id} className="bg-white text-gray-900 p-6 shadow-md rounded-lg">
+                                    <h4 className="text-xl font-bold mb-2">{blog.newTitle}</h4>
+                                    <p className="text-gray-700">{blog.newContent.substring(0, 100)}...</p>
+                                </div>
+                            ))
+                    }
                 </div>
             </section>
 
@@ -109,3 +130,5 @@ function Home() {
 }
 
 export default Home
+
+
